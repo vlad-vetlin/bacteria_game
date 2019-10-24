@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('email');
             $table->string('country');
             $table->string('city');
+            $table->integer('is_admin');
 
             $table->timestamps();
             $table->softDeletes();

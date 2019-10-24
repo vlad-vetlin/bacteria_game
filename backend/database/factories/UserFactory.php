@@ -27,5 +27,6 @@ $factory->define(User::class, function (Faker $faker) {
         'email' => $faker->email,
         'country' => $faker->country,
         'city' => $faker->city,
+        'is_admin' => 0,
     ];
 });
