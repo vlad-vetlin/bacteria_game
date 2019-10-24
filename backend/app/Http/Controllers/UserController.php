@@ -26,7 +26,7 @@ class UserController extends Controller
     public function index(Request $request) : AnonymousResourceCollection
     {
         $data = $request->validate([
-            'filters' => 'array|nullable|min:1',
+            'filters' => 'array|min:1',
 
             'filters.rating' => 'array|min:1',
             'filters.rating.from' => 'integer|min:'  . User::MIN_RATING_VALUE . '|max:' . User::MAX_RATING_VALUE,
@@ -34,8 +34,8 @@ class UserController extends Controller
 
             'filters.is_admin' => 'boolean',
 
-            'filters.city' => 'string|nullable|max:191',
-            'filters.country' => 'string|nullable|max:191',
+            'filters.city' => 'string|max:191',
+            'filters.country' => 'string|max:191',
 
             'query' => 'string|nullable',
 
@@ -47,7 +47,7 @@ class UserController extends Controller
             'sort' => 'array',
 
             'sort.by' => 'string|in:rating,city,country,first_name,last_name',
-            'sort.dir' => 'nullable|string|in:ASC,DESC',
+            'sort.dir' => 'string|in:ASC,DESC',
         ]);
 
         if (($data['filters']['rating']['to'] ?? User::MAX_RATING_VALUE) < ($data['filters']['rating']['from'] ?? User::MIN_RATING_VALUE)) {
@@ -74,13 +74,22 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @param  User $user
+     *
+     * @return UserResource
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user) : UserResource
     {
-        //
+        $data = $request->validate([
+            'first_name' => 'string|max:191',
+            'last_name' => 'string|max:191',
+            'country' => 'string|max:191',
+            'city' => 'string|max:191',
+            'description' => 'string|nullable',
+        ]);
+
+        return $this->service->update($data, $user);
     }
 
     /**

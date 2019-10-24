@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->integer('rating');
             $table->string('first_name');
             $table->string('last_name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('password');
             $table->string('email');
             $table->string('country');

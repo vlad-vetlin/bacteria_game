@@ -73,4 +73,10 @@ class UserService
         return UserResource::collection($response);
     }
 
+    public function update(array $data, User $user) : UserResource
+    {
+        $user->update($data);
+
+        return UserResource::make($user);
+    }
 }
