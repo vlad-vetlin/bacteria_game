@@ -61,10 +61,13 @@ abstract class TestCase extends BaseTestCase
         }
     }
 
-    public function assertValidationFailed(TestResponse $response, string $message, string $field)
+    public function assertValidationFailed(TestResponse $response, array $messages)
     {
         self::assertEquals(422, $response->status());
-        self::assertTrue(in_array($message, $response->json()['errors'][$field]),
-            "Failed asserting that field " . $field . ' has validation error');
+
+        foreach ($messages as $field => $message) {
+            self::assertTrue(in_array($message, $response->json()['errors'][$field]),
+                "Failed asserting that field " . $field . ' has validation error');
+        }
     }
 }

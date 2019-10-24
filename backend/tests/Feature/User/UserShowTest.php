@@ -44,6 +44,7 @@ class UserShowTest extends TestCase
             ['last_name'],
             ['city'],
             ['country'],
+            ['description'],
         ];
     }
 

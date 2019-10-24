@@ -23,6 +23,7 @@ $factory->define(User::class, function (Faker $faker) {
         'rating' => $faker->numberBetween(0, 5000),
         'first_name' => $faker->firstName,
         'last_name' => $faker->lastName,
+        'description' => $faker->realText(),
         'password' => Hash::make('secret'),
         'email' => $faker->email,
         'country' => $faker->country,

@@ -19,11 +19,12 @@ class CreateUsersTable extends Migration
             $table->integer('rating');
             $table->string('first_name');
             $table->string('last_name');
+            $table->text('description');
             $table->string('password');
             $table->string('email');
             $table->string('country');
             $table->string('city');
-            $table->integer('is_admin');
+            $table->boolean('is_admin');
 
             $table->timestamps();
             $table->softDeletes();

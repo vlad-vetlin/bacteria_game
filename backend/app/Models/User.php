@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 
 /**
  * Class User
@@ -14,6 +15,7 @@ use Illuminate\Notifications\Notifiable;
  * @property int $rating
  * @property string $first_name
  * @property string $second_name
+ * @property string $description
  * @property string $password
  * @property string $country
  * @property string $city
@@ -37,6 +39,7 @@ class User extends Authenticatable
         'second_name',
         'country',
         'city',
+        'description',
     ];
 
     /**
@@ -48,4 +51,13 @@ class User extends Authenticatable
         'password',
         'is_admin',
     ];
+
+    public const MIN_RATING_VALUE = 0;
+    public const MAX_RATING_VALUE = 5000;
+
+
+    public function scopeRatingFilter(EloquentBuilder $builder, ?int $from, ?int $to)
+    {
+        return $builder->whereBetween('rating', [$from ?? static::MIN_RATING_VALUE, $to ?? static::MAX_RATING_VALUE]);
+    }
 }
