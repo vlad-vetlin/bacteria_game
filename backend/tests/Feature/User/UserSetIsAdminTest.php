@@ -3,9 +3,10 @@
 namespace Tests\Feature;
 
 use App\User;
-use Tests\TestCase;
+use Illuminate\Support\Facades\Auth;
+use Tests\AdminTestCase;
 
-class UserSetIsAdminTest extends TestCase
+class UserSetIsAdminTest extends AdminTestCase
 {
 
     /**
@@ -37,5 +38,38 @@ class UserSetIsAdminTest extends TestCase
             [false, true],
             [false, false],
         ];
+    }
+
+    public function testSetIsAdminNotAuth()
+    {
+        $user = factory(User::class)->create(['is_admin' => false]);
+
+        Auth::logout();
+
+        $data = [
+            'is_admin' => true,
+        ];
+
+        $response = $this->patchJson(route('users.set_is_admin', ['user' => $user->id]), $data);
+
+        self::assertEquals(403, $response->status());
+    }
+
+    public function testSetIsAdminNotAdmin()
+    {
+        $user = factory(User::class)->create(['is_admin' => false]);
+
+        /** @var User $auth_user */
+        $auth_user = Auth::user();
+        $auth_user->is_admin = false;
+        $auth_user->save();
+
+        $data = [
+            'is_admin' => true,
+        ];
+
+        $response = $this->patchJson(route('users.set_is_admin', ['user' => $user->id]), $data);
+
+        self::assertEquals(403, $response->status());
     }
 }

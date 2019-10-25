@@ -3,9 +3,7 @@
 namespace Tests\Feature;
 
 use App\User;
-use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
-use Tests\UserTestCase;
 
 class GetCitiesTest extends TestCase
 {
@@ -13,7 +11,7 @@ class GetCitiesTest extends TestCase
     {
         factory(User::class, 10)->create();
 
-        $response = $this->get(route('users.cities'))->json()['data'];
+        $response = $this->getJson(route('users.cities'))->json()['data'];
 
         self::assertCount(10, $response);
 

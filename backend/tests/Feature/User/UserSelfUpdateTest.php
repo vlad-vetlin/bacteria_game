@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\User;
 use Illuminate\Support\Facades\Auth;
-use Tests\TestCase;
 use Tests\UserTestCase;
 
 class UserSelfUpdateTest extends UserTestCase
@@ -106,5 +105,18 @@ class UserSelfUpdateTest extends UserTestCase
         $response = $this->patchJson(route('users.self_update'), $data);
 
         self::assertEquals(201, $response->status());
+    }
+
+    public function testSelfUpdateNotAuth()
+    {
+        Auth::logout();
+
+        $data = [
+            'first_name' => 'kek',
+        ];
+
+        $response = $this->patchJson(route('users.self_update'), $data);
+
+        self::assertEquals(403, $response->status());
     }
 }

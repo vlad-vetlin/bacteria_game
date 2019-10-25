@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\User;
-use http\Env\Response;
 use Illuminate\Support\Arr;
 use Tests\TestCase;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
