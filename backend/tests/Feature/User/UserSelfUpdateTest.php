@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 use Tests\UserTestCase;
 
-class UserUpdateTest extends UserTestCase
+class UserSelfUpdateTest extends UserTestCase
 {
     /**
      * @param string $key

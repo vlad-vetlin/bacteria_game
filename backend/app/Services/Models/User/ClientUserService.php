@@ -7,9 +7,12 @@ namespace App\Services\Models\User;
 use App\Services\Paginator;
 use App\User;
 use App\Http\Resources\UserResource;
+use Exception;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class ClientUserService
 {
@@ -79,4 +82,27 @@ class ClientUserService
 
         return UserResource::make($user);
     }
+
+    public function getCities() : array
+    {
+        return ['data' => User::query()->orderBy('city')->pluck('city')];
+    }
+
+    public function getCountries() : array
+    {
+        return ['data' => User::query()->orderBy('country')->pluck('country')];
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return array
+     *
+     * @throws Exception
+     */
+    public function destroy(User $user) : array
+    {
+        Auth::logout();
+
+        return ['data' => $user->delete()];}
 }

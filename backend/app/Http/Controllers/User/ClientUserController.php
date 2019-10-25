@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Services\Models\User\ClientUserService;
 use App\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -81,7 +83,7 @@ class ClientUserController extends Controller
      *
      * @return UserResource
      */
-    public function update(Request $request) : UserResource
+    public function selfUpdate(Request $request) : UserResource
     {
         /** @var User $user */
         $user = Auth::user();
@@ -109,11 +111,31 @@ class ClientUserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return array
+     *
+     * @throws Exception
      */
-    public function destroy($id)
+    public function selfDestroy() : array
     {
-        //
+        /** @var User $user */
+        $user = Auth::user();
+
+        return $this->service->destroy($user);
+    }
+
+    /**
+     * @return array
+     */
+    public function getCities() : array
+    {
+        return $this->service->getCities();
+    }
+
+    /**
+     * @return array
+     */
+    public function getCountries() : array
+    {
+        return $this->service->getCountries();
     }
 }

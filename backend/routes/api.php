@@ -21,7 +21,11 @@ Route::name('users.')->prefix('users')->group(function () {
 });
 
 Route::name('users.')->prefix('users')->group(function () {
-    Route::patch('self_update', 'User\ClientUserController@update')->name('self_update');
+    Route::patch('self_update', 'User\ClientUserController@selfUpdate')->name('self_update');
+    Route::delete('self_destroy', 'User\ClientUserController@selfDestroy')->name('self_destroy');
+
+    Route::get('cities', 'User\ClientUserController@getCities')->name('cities');
+    Route::get('countries', 'User\ClientUserController@getCountries')->name('countries');
 });
 
 Route::apiResource('users', 'User\ClientUserController');
