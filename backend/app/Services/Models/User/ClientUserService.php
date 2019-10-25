@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Services\Models;
+namespace App\Services\Models\User;
 
 
 use App\Services\Paginator;
@@ -11,7 +11,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 
-class UserService
+class ClientUserService
 {
     /**
      * @param User $user

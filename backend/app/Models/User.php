@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
  * @property string $password
  * @property string $country
  * @property string $city
+ * @property bool $is_admin
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property Carbon $deleted_at

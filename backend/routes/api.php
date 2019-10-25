@@ -14,4 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResource('users', 'UserController');
+Route::name('users.')->prefix('users')->group(function () {
+    Route::prefix('{user}')->group(function () {
+        Route::patch('set_is_admin', 'User\AdminUserController@setIsAdmin')->name('set_is_admin');
+    });
+});
+
+Route::apiResource('users', 'User\ClientUserController');
+

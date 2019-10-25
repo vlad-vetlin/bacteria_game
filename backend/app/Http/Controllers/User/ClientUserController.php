@@ -1,19 +1,20 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use App\Services\Models\UserService;
+use App\Services\Models\User\ClientUserService;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Validation\ValidationException;
 
-class UserController extends Controller
+class ClientUserController extends Controller
 {
     public function __construct()
     {
-        $this->service = new UserService();
+        $this->service = new ClientUserService();
     }
 
     /**
