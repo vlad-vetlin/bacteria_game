@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::name('users.')->prefix('users')->group(function () {
     Route::prefix('{user}')->group(function () {
         Route::patch('set_is_admin', 'User\AdminUserController@setIsAdmin')->name('set_is_admin');
+        Route::delete('destroy', 'User\AdminUserController@destroy')->name('destroy');
     });
 });
 
@@ -26,7 +27,5 @@ Route::name('users.')->prefix('users')->group(function () {
 
     Route::get('cities', 'User\ClientUserController@getCities')->name('cities');
     Route::get('countries', 'User\ClientUserController@getCountries')->name('countries');
+    Route::get('index', 'User\ClientUserController@index')->name('index');
 });
-
-Route::apiResource('users', 'User\ClientUserController');
-

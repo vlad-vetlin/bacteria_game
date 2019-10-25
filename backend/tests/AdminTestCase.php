@@ -6,10 +6,12 @@ use App\User;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Auth;
 
-abstract class AdminTestCase extends BaseTestCase
+abstract class AdminTestCase extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
+        parent::setUp();
+
         $user = factory(User::class)->create(['is_admin' => true]);
 
         Auth::login($user);

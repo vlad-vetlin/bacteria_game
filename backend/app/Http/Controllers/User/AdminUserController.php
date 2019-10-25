@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Services\Models\User\AdminUserService;
 use App\User;
+use Exception;
 use Illuminate\Http\Request;
 
 class AdminUserController extends Controller
@@ -28,6 +29,18 @@ class AdminUserController extends Controller
         ]);
 
         return $this->service->setIsAdmin($user, $request->input('is_admin'));
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return array
+     *
+     * @throws Exception
+     */
+    public function destroy(User $user) : array
+    {
+       return $this->service->destroy($user);
     }
 
 }
