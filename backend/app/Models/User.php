@@ -36,9 +36,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'first_name',
-        'second_name',
+        'last_name',
         'country',
         'city',
+        'email',
         'description',
     ];
 
@@ -54,7 +55,7 @@ class User extends Authenticatable
 
     public const MIN_RATING_VALUE = 0;
     public const MAX_RATING_VALUE = 5000;
-
+    public const START_RATING_VALUE = 1000;
 
     public function scopeRatingFilter(EloquentBuilder $builder, ?int $from, ?int $to)
     {

@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class RegisterController extends Controller
 {
@@ -49,9 +50,19 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'first_name' => 'required|string|max:191',
+            'last_name' => 'required|string|max:191',
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:191',
+                Rule::unique('users', 'email')->whereNull('deleted_at'),
+            ],
+            'country' => 'required|string|max:191',
+            'city' => 'required|string|max:191',
+            'description' => 'string|nullable',
+            'password' => 'required|string|min:8|confirmed|max:191',
         ]);
     }
 
@@ -63,10 +74,23 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
+        $user = new User();
+
+        $user->fill([
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'country' => $data['country'],
+            'city' => $data['city'],
+            'description' => $data['description'] ?? null,
         ]);
+
+        $user->rating = User::START_RATING_VALUE;
+        $user->password = Hash::make($data['password']);
+        $user->is_admin = false;
+
+        $user->save();
+
+        return $user;
     }
 }

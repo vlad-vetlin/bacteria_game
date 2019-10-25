@@ -3,9 +3,11 @@
 namespace Tests\Feature;
 
 use App\User;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
+use Tests\UserTestCase;
 
-class UserUpdateTest extends TestCase
+class UserUpdateTest extends UserTestCase
 {
     /**
      * @param string $key
@@ -15,16 +17,15 @@ class UserUpdateTest extends TestCase
      */
     public function testUpdateOnlyOneField(string $key, $value)
     {
-        $user = factory(User::class)->create([$key => $value]);
-
         $data = [
             $key => $value,
         ];
 
+        $this->patch(route('users.self_update'), $data);
 
-        $response = $this->patch(route('users.update', ['user' => $user->id]), $data)->json()['data'];
+        $user = Auth::user();
 
-        self::assertEquals($value, $response[$key]);
+        self::assertEquals($value, $user->$key);
     }
 
     public function fieldDataProvider()
@@ -32,6 +33,7 @@ class UserUpdateTest extends TestCase
         return [
             ['first_name', 'kek'],
             ['last_name', 'kek'],
+            ['email', 'kek@kek.kek'],
             ['city', 'kek'],
             ['country', 'kek'],
             ['description', 'kek'],
@@ -55,9 +57,7 @@ class UserUpdateTest extends TestCase
             $key => $value,
         ];
 
-        $user = factory(User::class)->create();
-
-        $response = $this->patchJson(route('users.update', ['user' => $user->id]), $data);
+        $response = $this->patchJson(route('users.self_update'), $data);
 
         $this->assertValidationFailed($response, [$key => 'The ' . str_replace('_', ' ', $key) .' may not be greater than 191 characters.']);
     }
@@ -69,6 +69,42 @@ class UserUpdateTest extends TestCase
             ['last_name'],
             ['city'],
             ['country'],
+            ['email'],
         ];
+    }
+
+    public function testCheckInvalidEmail()
+    {
+        $data = [
+            'email' => 'kek',
+        ];
+
+        $response = $this->patchJson(route('users.self_update'), $data);
+
+        $this->assertValidationFailed($response, ['email' => 'The email must be a valid email address.']);
+    }
+
+    public function testUpdateEmailThatAlreadyExist()
+    {
+        $second_user = factory(User::class)->create();
+
+        $data = [
+            'email' => $second_user->email,
+        ];
+
+        $response = $this->patchJson(route('users.self_update'), $data);
+
+        $this->assertValidationFailed($response, ['email' => 'The email has already been taken.']);
+    }
+
+    public function testUpdateSelfEmailWithoutAnyDistincts()
+    {
+        $data = [
+            'email' => Auth::user()->email,
+        ];
+
+        $response = $this->patchJson(route('users.self_update'), $data);
+
+        self::assertEquals(201, $response->status());
     }
 }

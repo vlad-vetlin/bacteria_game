@@ -20,5 +20,9 @@ Route::name('users.')->prefix('users')->group(function () {
     });
 });
 
+Route::name('users.')->prefix('users')->group(function () {
+    Route::patch('self_update', 'User\ClientUserController@update')->name('self_update');
+});
+
 Route::apiResource('users', 'User\ClientUserController');
 

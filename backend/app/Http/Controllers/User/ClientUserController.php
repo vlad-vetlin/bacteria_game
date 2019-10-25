@@ -8,6 +8,8 @@ use App\Services\Models\User\ClientUserService;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class ClientUserController extends Controller
@@ -76,19 +78,30 @@ class ClientUserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  Request  $request
-     * @param  User $user
      *
      * @return UserResource
      */
-    public function update(Request $request, User $user) : UserResource
+    public function update(Request $request) : UserResource
     {
+        /** @var User $user */
+        $user = Auth::user();
+
         $data = $request->validate([
             'first_name' => 'string|max:191',
             'last_name' => 'string|max:191',
             'country' => 'string|max:191',
+            'email' => [
+               'string',
+               'max:191',
+               'email',
+               Rule::unique('users', 'email')
+                   ->whereNull('deleted_at')
+                   ->whereNot('id', $user->id),
+            ],
             'city' => 'string|max:191',
             'description' => 'string|nullable',
         ]);
+
 
         return $this->service->update($data, $user);
     }
