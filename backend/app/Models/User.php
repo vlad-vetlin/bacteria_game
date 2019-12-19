@@ -1,8 +1,9 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -60,5 +61,10 @@ class User extends Authenticatable
     public function scopeRatingFilter(EloquentBuilder $builder, ?int $from, ?int $to)
     {
         return $builder->whereBetween('rating', [$from ?? static::MIN_RATING_VALUE, $to ?? static::MAX_RATING_VALUE]);
+    }
+
+    public function organisms() : HasMany
+    {
+        return $this->hasMany(Organism::class);
     }
 }

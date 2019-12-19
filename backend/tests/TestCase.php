@@ -50,7 +50,7 @@ abstract class TestCase extends BaseTestCase
     }
 
     public function assertModelIsDeleted(Model $model)
-    {
+    
         $model = $model->fresh();
 
         if (method_exists($model, "getDeletedAtColumn")) {
